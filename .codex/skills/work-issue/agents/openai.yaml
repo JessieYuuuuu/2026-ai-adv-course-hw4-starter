@@ -1,0 +1,7 @@
+interface:
+  display_name: "處理 GitHub Issue"
+  short_description: "依既定流程完成 Issue、測試、PR 與審查"
+  default_prompt: "使用 $work-issue 處理指定編號的 GitHub Issue，完成後停在待人工合併狀態。"
+
+policy:
+  allow_implicit_invocation: false
