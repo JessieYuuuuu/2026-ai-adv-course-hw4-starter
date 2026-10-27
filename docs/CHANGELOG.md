@@ -7,8 +7,10 @@
 ### Added
 - 完成 Issue #1 結帳優惠碼：新增 `FLOWER100`、`SPRING10` 與失效碼 `SUMMER50` 規則，訂單保存優惠碼與折扣快照，免運門檻改以折扣後商品小計判斷
 - 新增 Coupon 模組單元測試，並通過 `tests/acceptance/coupon.test.js` 全部驗收案例
+- 完成 Issue #2 我的訂單篩選與分頁：支援 `status`、`page`、`limit`，回傳分頁資訊並限制每頁最多 50 筆
 
 ### Changed
+- `GET /api/orders` 嚴格驗證狀態與正整數分頁參數，僅查詢登入會員自己的訂單，並以建立時間由新到舊穩定排序
 - 抽出 `src/services/orderService.js`（訂單查詢、序列化與建單 transaction）與 `src/services/paymentService.js`（QueryTradeInfo 結果判斷與付款狀態更新）
 - 新增 `src/utils/validators.js` 統一路由輸入驗證；Shipping 模組改以規則表描述，單元測試改為 table-driven
 - `postman_collection.json` 不進版控（列入 `.gitignore`），需要時以 `npm run postman` 產生；路由變更後只需以 `npm run openapi` 同步 `openapi.json`。`docs/TESTING.md` 補上產生與匯入步驟

@@ -13,7 +13,7 @@
 ## 執行指令
 
 ```bash
-# 單元與 API 測試（7 個檔案、55 項測試）
+# 單元與 API 測試（8 個檔案、67 項測試）
 npm run test:unit
 
 # 結帳、訂單、DB、庫存、回滾與綠界整合測試（10 項測試）
@@ -41,6 +41,7 @@ Integration Test 不呼叫真實綠界 API，無需外部網路。
 ```bash
 npm run test:acceptance                 # 全部
 npm run test:acceptance -- coupon       # 只跑檔名包含 coupon 的測試
+npm run test:acceptance -- order-filter # 只跑我的訂單篩選與分頁驗收測試
 ```
 
 - 設定檔為 `vitest.acceptance.config.js`，同樣使用記憶體 SQLite。
