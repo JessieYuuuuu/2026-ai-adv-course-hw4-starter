@@ -1,0 +1,15 @@
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
+
+[agents.security-reviewer]
+description = "審查權限、身分驗證、金流驗證與輸入驗證，只回報問題與證據。"
+config_file = "agents/security-reviewer.toml"
+
+[agents.code-reviewer]
+description = "審查業務邏輯、邊界條件、規格符合度，以及測試是否被刪除、跳過或放寬。"
+config_file = "agents/code-reviewer.toml"
+
+[agents.test-runner]
+description = "執行指定測試，只回報失敗項目、位置與可能原因，不修改檔案。"
+config_file = "agents/test-runner.toml"

@@ -424,6 +424,8 @@ describe('Order checkout integration flow', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const forgedResponses = [
+      // Missing signature
+      `MerchantID=${ECPAY_CONFIG.merchantId}&MerchantTradeNo=${merchantTradeNo}&TradeAmt=${order.total_amount}&TradeStatus=1`,
       // Tampered signature
       `MerchantID=${ECPAY_CONFIG.merchantId}&MerchantTradeNo=${merchantTradeNo}&TradeAmt=${order.total_amount}&TradeStatus=1&CheckMacValue=${'0'.repeat(64)}`,
       // Valid signature but a different amount

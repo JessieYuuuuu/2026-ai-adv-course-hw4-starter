@@ -55,6 +55,22 @@ describe('Cart API', () => {
     expect(res.body.data).toHaveProperty('quantity', 3);
   });
 
+  it('should reject non-positive or non-integer quantity updates', async () => {
+    for (const quantity of [0, -1, 1.5, '3abc', [5], null]) {
+      const res = await request(app)
+        .patch(`/api/cart/${cartItemId}`)
+        .set('X-Session-Id', sessionId)
+        .send({ quantity });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toEqual({
+        data: null,
+        error: 'VALIDATION_ERROR',
+        message: 'quantity 必須為正整數',
+      });
+    }
+  });
+
   it('should remove cart item (guest mode)', async () => {
     const res = await request(app)
       .delete(`/api/cart/${cartItemId}`)

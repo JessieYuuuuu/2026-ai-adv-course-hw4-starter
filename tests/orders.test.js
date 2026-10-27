@@ -129,6 +129,20 @@ describe('Orders API', () => {
     expect(Array.isArray(res.body.data.items)).toBe(true);
   });
 
+  it('should hide another member order detail', async () => {
+    const { token: anotherUserToken } = await registerUser();
+    const res = await request(app)
+      .get(`/api/orders/${orderId}`)
+      .set('Authorization', `Bearer ${anotherUserToken}`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({
+      data: null,
+      error: 'NOT_FOUND',
+      message: '訂單不存在',
+    });
+  });
+
   it('should return 404 for non-existent order', async () => {
     const res = await request(app)
       .get('/api/orders/non-existent-order-id')
