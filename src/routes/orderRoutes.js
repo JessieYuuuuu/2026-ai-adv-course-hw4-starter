@@ -280,8 +280,8 @@ router.post('/', (req, res) => {
  *         schema:
  *           type: integer
  *           minimum: 1
- *           maximum: 50
  *           default: 10
+ *         description: 每頁筆數；超過 50 時以 50 計
  *     responses:
  *       200:
  *         description: 成功

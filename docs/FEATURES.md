@@ -312,7 +312,7 @@
 
 **回應欄位**：id, order_no, subtotal, coupon_code, discount, shipping_fee, shipping_method, is_remote_area, is_express, total_amount, status, created_at
 
-**回應結構**：`{ orders: [...], pagination: { page, limit, total, totalPages } }`。查詢只會計算並回傳目前登入會員自己的訂單。
+**回應結構**：`{ data: { orders: [...], pagination: { page, limit, total, totalPages } }, error, message }`。查詢只會計算並回傳目前登入會員自己的訂單。
 
 **錯誤情境**：`status` 不在允許值內，或 `page`、`limit` 不是正整數時，回傳 400 `VALIDATION_ERROR`。
 
