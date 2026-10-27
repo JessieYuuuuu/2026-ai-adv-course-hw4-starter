@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Added
+- 完成 Issue #1 結帳優惠碼：新增 `FLOWER100`、`SPRING10` 與失效碼 `SUMMER50` 規則，訂單保存優惠碼與折扣快照，免運門檻改以折扣後商品小計判斷
+- 新增 Coupon 模組單元測試，並通過 `tests/acceptance/coupon.test.js` 全部驗收案例
+
 ### Changed
 - 抽出 `src/services/orderService.js`（訂單查詢、序列化與建單 transaction）與 `src/services/paymentService.js`（QueryTradeInfo 結果判斷與付款狀態更新）
 - 新增 `src/utils/validators.js` 統一路由輸入驗證；Shipping 模組改以規則表描述，單元測試改為 table-driven

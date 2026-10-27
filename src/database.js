@@ -58,6 +58,8 @@ function initializeDatabase() {
       recipient_email TEXT NOT NULL,
       recipient_address TEXT NOT NULL,
       subtotal INTEGER NOT NULL,
+      coupon_code TEXT,
+      discount INTEGER NOT NULL DEFAULT 0,
       shipping_fee INTEGER NOT NULL DEFAULT 0,
       shipping_method TEXT NOT NULL DEFAULT 'home_delivery',
       is_remote_area INTEGER NOT NULL DEFAULT 0,
@@ -87,19 +89,21 @@ function initializeDatabase() {
     // Column already exists, ignore
   }
 
-  // Migration: add shipping snapshot columns without changing legacy order totals.
+  // Migration: add pricing snapshot columns without changing legacy order totals.
   const orderColumns = new Set(
     db.prepare('PRAGMA table_info(orders)').all().map(column => column.name)
   );
-  const shippingColumns = [
+  const orderSnapshotColumns = [
     ['subtotal', 'INTEGER NOT NULL DEFAULT 0'],
+    ['coupon_code', 'TEXT'],
+    ['discount', 'INTEGER NOT NULL DEFAULT 0'],
     ['shipping_fee', 'INTEGER NOT NULL DEFAULT 0'],
     ['shipping_method', "TEXT NOT NULL DEFAULT 'home_delivery'"],
     ['is_remote_area', 'INTEGER NOT NULL DEFAULT 0'],
     ['is_express', 'INTEGER NOT NULL DEFAULT 0']
   ];
 
-  for (const [column, definition] of shippingColumns) {
+  for (const [column, definition] of orderSnapshotColumns) {
     if (!orderColumns.has(column)) {
       db.exec(`ALTER TABLE orders ADD COLUMN ${column} ${definition}`);
     }
