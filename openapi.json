@@ -1655,6 +1655,13 @@
                               "subtotal": {
                                 "type": "integer"
                               },
+                              "coupon_code": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "discount": {
+                                "type": "integer"
+                              },
                               "shipping_fee": {
                                 "type": "integer"
                               },
@@ -1758,6 +1765,13 @@
                           "type": "string"
                         },
                         "subtotal": {
+                          "type": "integer"
+                        },
+                        "coupon_code": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "discount": {
                           "type": "integer"
                         },
                         "shipping_fee": {
