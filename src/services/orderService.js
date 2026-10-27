@@ -26,12 +26,21 @@ function findOrderForUser(orderId, userId) {
   return db.prepare('SELECT * FROM orders WHERE id = ? AND user_id = ?').get(orderId, userId);
 }
 
-function listOrdersForUser(userId) {
-  return db.prepare(
+function listOrdersForUser(userId, { status = null, page = 1, limit = 10 } = {}) {
+  const where = status ? 'WHERE user_id = ? AND status = ?' : 'WHERE user_id = ?';
+  const params = status ? [userId, status] : [userId];
+  const offset = (page - 1) * limit;
+
+  const total = db.prepare(`SELECT COUNT(*) AS count FROM orders ${where}`).get(...params).count;
+  const orders = db.prepare(
     `SELECT id, order_no, subtotal, coupon_code, discount, shipping_fee, shipping_method,
             is_remote_area, is_express, total_amount, status, created_at
-     FROM orders WHERE user_id = ? ORDER BY created_at DESC`
-  ).all(userId);
+     FROM orders ${where}
+     ORDER BY created_at DESC, rowid DESC
+     LIMIT ? OFFSET ?`
+  ).all(...params, limit, offset);
+
+  return { orders, total };
 }
 
 function getOrderItems(orderId) {

@@ -105,6 +105,31 @@ describe('Orders API', () => {
     expect(res.body.data).toHaveProperty('orders');
     expect(Array.isArray(res.body.data.orders)).toBe(true);
     expect(res.body.data.orders.length).toBeGreaterThan(0);
+    expect(res.body.data.pagination).toEqual({
+      page: 1,
+      limit: 10,
+      total: 1,
+      totalPages: 1,
+    });
+  });
+
+  it('should validate order list filters and cap the page size', async () => {
+    const capped = await request(app)
+      .get('/api/orders?status=pending&limit=100')
+      .set('Authorization', `Bearer ${userToken}`);
+
+    expect(capped.status).toBe(200);
+    expect(capped.body.data.pagination.limit).toBe(50);
+
+    for (const query of ['status=unknown', 'page=0', 'page=1.5', 'limit=-1']) {
+      const invalid = await request(app)
+        .get(`/api/orders?${query}`)
+        .set('Authorization', `Bearer ${userToken}`);
+
+      expect(invalid.status).toBe(400);
+      expect(invalid.body).toHaveProperty('data', null);
+      expect(invalid.body).toHaveProperty('error', 'VALIDATION_ERROR');
+    }
   });
 
   it('should get order detail', async () => {

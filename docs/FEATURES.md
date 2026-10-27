@@ -15,7 +15,7 @@
 | 後台訂單管理 | ✅ 完成 | 訂單查詢與狀態篩選 |
 | 前台頁面 | ✅ 完成 | EJS + Tailwind CSS |
 | 後台頁面 | ✅ 完成 | EJS + Tailwind CSS |
-| 測試 | ✅ 完成 | 66 項 Unit/API + 10 項 Integration + 10 項 Coupon 驗收 + 1 項綠界真實付款 E2E |
+| 測試 | ✅ 完成 | 67 項 Unit/API + 10 項 Integration + 10 項 Coupon 驗收 + 7 項訂單篩選驗收 + 1 項綠界真實付款 E2E |
 | API 文件 | ✅ 完成 | Swagger/OpenAPI 生成與 Postman Collection 自動轉換 |
 
 ---
@@ -300,9 +300,21 @@
 
 ### GET /api/orders — 訂單列表
 
-**行為描述**：回傳當前使用者的所有訂單，依建立時間降序排列。無分頁。
+**行為描述**：回傳當前使用者的訂單，支援狀態篩選與分頁，並依建立時間由新到舊排列。同一秒建立的訂單以後建立者優先，確保分頁順序穩定。
+
+**Query 參數**：
+
+| 參數 | 型別 | 預設值 | 規則 |
+|------|------|--------|------|
+| status | string | 無 | `pending`、`paid`、`failed` |
+| page | integer | 1 | 必須為正整數 |
+| limit | integer | 10 | 必須為正整數，最大 50；超過時以 50 計 |
 
 **回應欄位**：id, order_no, subtotal, coupon_code, discount, shipping_fee, shipping_method, is_remote_area, is_express, total_amount, status, created_at
+
+**回應結構**：`{ data: { orders: [...], pagination: { page, limit, total, totalPages } }, error, message }`。查詢只會計算並回傳目前登入會員自己的訂單。
+
+**錯誤情境**：`status` 不在允許值內，或 `page`、`limit` 不是正整數時，回傳 400 `VALIDATION_ERROR`。
 
 ### GET /api/orders/:id — 訂單詳情
 
